@@ -1,0 +1,13 @@
+{
+  "name": "photo-booth",
+  "description": "",
+  "version": "0.1.0",
+  "dependencies": {
+    "aws-sdk": "^2.889.0"
+  },
+  "devDependencies": {
+    "serverless-iam-roles-per-function": "^3.1.0",
+    "serverless-plugin-optimize": "^4.2.1-rc.1",
+    "serverless-step-functions": "^2.30.0"
+  }
+}

@@ -1,0 +1,92 @@
+service: photo-booth
+
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  lambdaHashingVersion: 20201221
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'eu-central-1'}
+
+custom:
+  stateMachineName: 'photoBoothStepMachine'
+
+package:
+  individually: true
+
+functions:
+  init:
+    handler: src/init/handler.index
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action: 
+          - states:StartExecution
+        Resource: !Sub 'arn:aws:states:${AWS::Region}:${AWS::AccountId}:stateMachine:${self:custom.stateMachineName}'
+    events:
+      - s3:
+          bucket: !Ref S3Bucket
+          event: s3:ObjectCreated:*
+          existing: true
+          rules:
+            - prefix: uploads/
+            - suffix: .jpg
+    environment:
+      stateMachine: !Sub 'arn:aws:states:${AWS::Region}:${AWS::AccountId}:stateMachine:${self:custom.stateMachineName}'
+
+  removeBackground:
+    handler: src/removeBackground/handler.index
+
+  addNewBackground:
+    handler: src/addNewBackground/handler.index
+
+  addWatermark:
+    handler: src/addWatermark/handler.index
+
+  sendEmail:
+    handler: src/sendEmail/handler.index
+
+stepFunctions:
+  stateMachines:
+    photoBoothStepMachine:
+      name: ${self:custom.stateMachineName}
+      definition:
+        Comment: "State machine for Photo Booth service."
+        StartAt: RemoveBackground
+        States:
+          RemoveBackground:
+            Type: Task
+            Resource:
+              Fn::GetAtt: [removeBackground, Arn]
+            Next: AddNewBackground
+          AddNewBackground:
+            Type: Task
+            Resource:
+              Fn::GetAtt: [addNewBackground, Arn]
+            Next: AddWatermark
+          AddWatermark:
+            Type: Task
+            Resource:
+              Fn::GetAtt: [addWatermark, Arn]
+            Next: SendEmail
+          SendEmail:
+            Type: Task
+            Resource:
+              Fn::GetAtt: [sendEmail, Arn]
+            End: true
+
+resources:
+  Resources:
+    S3Bucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: !Sub 'photo-booth-${self:provider.stage}-${AWS::AccountId}-${AWS::Region}'
+  Outputs:
+    S3BucketName:
+      Value:
+        !Ref S3Bucket
+
+plugins:
+  - serverless-step-functions
+  - serverless-iam-roles-per-function
+  - serverless-plugin-optimize
