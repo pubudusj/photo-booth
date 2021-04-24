@@ -8,7 +8,7 @@ module.exports.index = async (event) => {
     bucketName: event['Records'][0]['s3']['bucket']['name'],
     bucektArn: event['Records'][0]['s3']['bucket']['arn'],
     object: event['Records'][0]['s3']['object']['key'],
-    fileName: event['Records'][0]['s3']['object']['key'].replace('uploads/', ''),
+    fileName: event['Records'][0]['s3']['object']['key'].replace('uploads/', '').replace('.jpg', ''),
   }
 
   let params = {

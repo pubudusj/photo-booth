@@ -36,6 +36,25 @@ functions:
 
   removeBackground:
     handler: src/removeBackground/handler.index
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action: 
+          - s3:GetObject
+        Resource:
+          - !Join
+            - ''
+            - - !GetAtt S3Bucket.Arn
+              - '/uploads/*'
+      - Effect: "Allow"
+        Action: 
+          - s3:PutObject
+        Resource:
+          - !Join
+            - ''
+            - - !GetAtt S3Bucket.Arn
+              - '/background_removed/*'
+    environment:
+      removeBgApiKey: ${env:REMOVE_BG_API_KEY}
 
   addNewBackground:
     handler: src/addNewBackground/handler.index

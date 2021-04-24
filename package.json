@@ -3,7 +3,8 @@
   "description": "",
   "version": "0.1.0",
   "dependencies": {
-    "aws-sdk": "^2.889.0"
+    "aws-sdk": "^2.889.0",
+    "axios": "^0.21.1"
   },
   "devDependencies": {
     "serverless-iam-roles-per-function": "^3.1.0",
