@@ -58,6 +58,33 @@ functions:
 
   addNewBackground:
     handler: src/addNewBackground/handler.index
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action: 
+          - s3:GetObject
+        Resource:
+          - !Join
+            - ''
+            - - !GetAtt S3Bucket.Arn
+              - '/background_removed/*'
+      - Effect: "Allow"
+        Action: 
+          - s3:GetObject
+        Resource:
+          - !Join
+            - ''
+            - - !GetAtt S3Bucket.Arn
+              - '/backgrounds/*'
+      - Effect: "Allow"
+        Action: 
+          - s3:PutObject
+        Resource:
+          - !Join
+            - ''
+            - - !GetAtt S3Bucket.Arn
+              - '/new_background/*'
+    environment:
+      noOfBackgroundImages: ${env:TOTAL_BACKGROUNDS}
 
   addWatermark:
     handler: src/addWatermark/handler.index
