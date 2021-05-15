@@ -15,7 +15,7 @@ module.exports.index = async event => {
   //Get random background
   var max = process.env['noOfBackgroundImages']
   var rand = Math.floor(Math.random() * (max - 1 + 1)) + 1
-  console.log(rand)
+
   const background = await s3.getObject({
       Bucket: event.bucketName,
       Key: 'backgrounds/background' + rand + '.png'

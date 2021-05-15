@@ -88,9 +88,49 @@ functions:
 
   addWatermark:
     handler: src/addWatermark/handler.index
+    optimize:
+      external: ['jimp']
+      externalPaths:
+        jimp: 'jimp-external/jimp'
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action: 
+          - s3:GetObject
+        Resource:
+          - !Join
+            - ''
+            - - !GetAtt S3Bucket.Arn
+              - '/new_background/*'
+      - Effect: "Allow"
+        Action: 
+          - s3:PutObject
+        Resource:
+          - !Join
+            - ''
+            - - !GetAtt S3Bucket.Arn
+              - '/final/*'
 
   sendEmail:
     handler: src/sendEmail/handler.index
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action: 
+          - s3:GetObject
+        Resource:
+          - !Join
+            - ''
+            - - !GetAtt S3Bucket.Arn
+              - '/final/*'
+      - Effect: "Allow"
+        Action: 
+          - SES:SendRawEmail
+        Resource: '*'
+        Condition:
+          StringEquals:
+            ses:FromAddress:
+              - ${env:SES_FROM_ADDRESS}
+    environment:
+      sesFromAddress: ${env:SES_FROM_ADDRESS}
 
 stepFunctions:
   stateMachines:
