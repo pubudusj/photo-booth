@@ -11,11 +11,33 @@ provider:
 
 custom:
   stateMachineName: 'photoBoothStepMachine'
+  signedUrlExpiredSeconds: ${opt:signedUrlExpiredSeconds, 432000 }
 
 package:
   individually: true
 
 functions:
+  createSignedUrl:
+    handler: src/createSignedUrl/handler.index
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action: 
+          - s3:PutObject
+        Resource:
+          - !Join
+            - ''
+            - - !GetAtt S3Bucket.Arn
+              - '/uploads/*'
+    events:
+      - http:
+          path: /upload
+          method: post
+          cors: true
+    environment:
+      bucketName: !Ref S3Bucket
+      signedUrlExpiredSeconds: ${self:custom.signedUrlExpiredSeconds}
+    optimize: false
+
   init:
     handler: src/init/handler.index
     iamRoleStatements:
@@ -167,6 +189,16 @@ resources:
       Type: AWS::S3::Bucket
       Properties:
         BucketName: !Sub 'photo-booth-${self:provider.stage}-${AWS::AccountId}-${AWS::Region}'
+        CorsConfiguration:
+          CorsRules:
+            - AllowedMethods:
+                - "PUT"
+              AllowedHeaders:
+                - "X-Forwarded-For"
+                - "x-amz-meta-user"
+              AllowedOrigins:
+                - '*'
+              MaxAge: 60
   Outputs:
     S3BucketName:
       Value:

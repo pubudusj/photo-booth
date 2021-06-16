@@ -23,7 +23,11 @@ module.exports.index = async event => {
 
   // Create jimp objects
   const imageObj = await jimp.read(image.Body)
-  const backgroundObj = await jimp.read(background.Body)
+  let backgroundObj = await jimp.read(background.Body)
+
+  // Resize background image
+  backgroundObj = backgroundObj.resize(imageObj.bitmap.width, imageObj.bitmap.height)
+         .quality(100)
 
   // Merge image with background
   const merged = await backgroundObj.composite(imageObj, 0, 0, { mode: jimp.BLEND_SOURCE_OVER })

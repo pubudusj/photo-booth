@@ -21,6 +21,7 @@ module.exports.index = async (event) => {
     {
       image_url: url,
       size: "auto",
+      type: "person",
     },
     {
       headers: {
