@@ -6,3 +6,6 @@ jspm_packages
 .serverless
 
 jimp-external/
+
+output.json
+.env

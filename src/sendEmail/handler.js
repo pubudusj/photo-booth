@@ -10,8 +10,13 @@ module.exports.index = async event => {
     Key: event.object 
   }).promise()
 
+  const originalImage = await s3.headObject({
+    Bucket: event.bucketName,
+    Key: 'uploads/'+event.fileName+'.jpg'
+  }).promise()
+
   const fromEmail = process.env['sesFromAddress']
-  const toEmail = 'pubudusj@gmail.com'
+  const toEmail = originalImage.Metadata.user
 
   // Build the raw email
   var ses_mail = "From: 'ServerlessPhotoBooth' <" + fromEmail + ">\n"
@@ -24,7 +29,7 @@ module.exports.index = async event => {
   ses_mail += "Hello from ServerlessPhotoBooth.\n\n";
   ses_mail += "--NextPart\n";
   ses_mail += "Content-Type: application/png; \n";
-  ses_mail += "Content-Disposition: attachment; filename=\"testone.png\"\n";
+  ses_mail += "Content-Disposition: attachment; filename=\"serverless-photobooth.png\"\n";
   ses_mail += "Content-Transfer-Encoding: base64\n\n"
   ses_mail += image.Body.toString('base64')
   ses_mail += "\n--NextPart";
@@ -40,5 +45,6 @@ module.exports.index = async event => {
 
   return {
     fileName: event.fileName,
+    receipient: params.Destinations
   }
 };

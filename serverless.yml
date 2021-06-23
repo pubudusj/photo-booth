@@ -12,6 +12,8 @@ provider:
 custom:
   stateMachineName: 'photoBoothStepMachine'
   signedUrlExpiredSeconds: ${opt:signedUrlExpiredSeconds, 432000 }
+  output:
+    file: ./output.json
 
 package:
   individually: true
@@ -36,7 +38,6 @@ functions:
     environment:
       bucketName: !Ref S3Bucket
       signedUrlExpiredSeconds: ${self:custom.signedUrlExpiredSeconds}
-    optimize: false
 
   init:
     handler: src/init/handler.index
@@ -145,6 +146,14 @@ functions:
               - '/final/*'
       - Effect: "Allow"
         Action: 
+          - s3:GetObject
+        Resource:
+          - !Join
+            - ''
+            - - !GetAtt S3Bucket.Arn
+              - '/uploads/*'
+      - Effect: "Allow"
+        Action: 
           - SES:SendRawEmail
         Resource: '*'
         Condition:
@@ -208,3 +217,4 @@ plugins:
   - serverless-step-functions
   - serverless-iam-roles-per-function
   - serverless-plugin-optimize
+  - serverless-stack-output

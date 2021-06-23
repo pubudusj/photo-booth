@@ -8,7 +8,6 @@ const signedUrlExpireSeconds = parseInt(process.env['signedUrlExpiredSeconds'])
 module.exports.index = async (event, context, callback) => {
   console.log(event)
   let body = JSON.parse(event.body)
-  console.log(body)
   const bucketName = process.env['bucketName']
   const object = 'uploads/' + crypto.randomBytes(16).toString("hex") + '.jpg'
 
