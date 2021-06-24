@@ -45,6 +45,6 @@ module.exports.index = async event => {
 
   return {
     fileName: event.fileName,
-    receipient: params.Destinations
+    receipient: params.Destinations[0]
   }
 };

@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row">
       <div v-show="!img" class="col-md-12">
-        <h2>Serverless PhtotoBooth</h2>
+        <h2>Serverless PhotoBooth</h2>
         <div class="row">
           <div>
             <vue-web-cam
