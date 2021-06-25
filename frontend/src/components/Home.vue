@@ -39,7 +39,7 @@
           <img :src="img" class="img-responsive" />
         </figure>
         <div>
-          <input type="text" class="txt" v-model="userEmail" />
+          <input type="email" required class="txt" v-model="userEmail" />
           <button type="button" class="btn btn-primary" @click="submitForm">
             Submit
           </button>
@@ -48,7 +48,7 @@
           </button>
         </div>
       </div>
-      <div v-if="message && !img" :class="'alert alert-' + message.type">
+      <div v-if="message" :class="'alert alert-' + message.type">
         {{ message.text }}
       </div>
     </div>
@@ -160,7 +160,14 @@ export default {
       });
     },
     submitForm() {
-      this.uploadImage(this.img, this.userEmail);
+      if (!this.validateEmail(this.userEmail)) {
+        this.message = {
+          text: "Invalid email address.",
+          type: "danger",
+        };
+      } else {
+        this.uploadImage(this.img, this.userEmail);
+      }
     },
     resetForm() {
       this.img = null;
@@ -168,7 +175,12 @@ export default {
     },
     cancelCaptured() {
       this.resetForm();
+      this.message = null;
     },
+    validateEmail(email) {
+      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(String(email).toLowerCase());
+    }
   },
 };
 </script>
