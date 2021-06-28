@@ -1,5 +1,5 @@
 # Serverless PhotoBooth with AWS
-## using AWS Lambda, Step Functions, API Gateway, S3, SES, Amplify website hosting and deploy with Serverless Framework
+## Using AWS Lambda, Step Functions, API Gateway, S3, SES, Amplify website hosting and deploy with Serverless Framework
 
 This repository contains all the source code and resources needed to deploy Serverless Photobooth service described in [this blog post](https://dev.to/pubudusj).
 
@@ -30,7 +30,7 @@ This will create the backend stack and make the frontend deployment bundle ready
 
 3. Once step 2 above is finished, you can deploy the frontend code in `frontend/dist/frontend.zip` easily with Amplify web hosting.
 
-4. If you need to run the frontend project in local, navigete to frontend directory and run `yarn run serve`
+4. If you need to run the frontend in local, navigate to frontend directory and run `yarn run serve`
 
 ## Delete the stack
 
