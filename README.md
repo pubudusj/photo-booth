@@ -1,7 +1,7 @@
 # Serverless PhotoBooth with AWS
 ## Using AWS Lambda, Step Functions, API Gateway, S3, SES, Amplify website hosting and deploy with Serverless Framework
 
-This repository contains all the source code and resources needed to deploy Serverless Photobooth service described in [this blog post](https://dev.to/pubudusj).
+This repository contains all the source code and resources needed to deploy Serverless Photobooth service described in [this blog post](https://dev.to/aws-builders/how-i-created-a-photo-booth-with-aws-serverless-3h2k).
 
 Architecture is as follows:
 
@@ -45,4 +45,4 @@ This will create the backend stack and make the frontend deployment bundle ready
 
 ## More info
 
-More information regarding the project can be found in [this blog post](https://dev.to/pubudusj).
+More information regarding the project can be found in [this blog post](https://dev.to/aws-builders/how-i-created-a-photo-booth-with-aws-serverless-3h2k).
