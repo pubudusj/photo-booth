@@ -38,6 +38,11 @@ This will create the backend stack and make the frontend deployment bundle ready
 
 ** Make sure the s3 directory created in the stack is empty before run this command.
 
+## Example
+
+![Steps](resources/steps.png)
+
+
 ## More info
 
 More information regarding the project can be found in [this blog post](https://dev.to/pubudusj).
